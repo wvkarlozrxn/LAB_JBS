@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="aplicaciones_Deportiva/JB_aplicaciones_Deportiva.csproj" />
+  <Project Path="Front_Deportivo/JB_Front_Deportivo.csproj" />
+  <Project Path="presentaciones_Deportiva/JB_presentaciones_Deportiva.csproj" />
+  <Project Path="Servicio_Deportivo/JB_Servicio_Deportivo.csproj" />
+</Solution>

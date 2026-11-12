@@ -1,0 +1,153 @@
+﻿@page
+@using JB_Front_Deportivo.Pages.Ventanas
+@model DeportivaModel
+@{
+    ViewData["Title"] = "Deportiva";
+}
+<form method="post"
+    enctype="multipart/form-data">
+
+    <div class="text-center">
+        <h1 class="display-4">Deportiva</h1>
+        <div>
+            <input type="submit"
+                value="Consultar"
+                class="btn btn-secondary"
+                asp-page-handler="BtConsultar"/>
+            <input type="submit"
+                value="Nuevo"
+                class="btn btn-secondary"
+                asp-page-handler="BtNuevo"/>
+            @* Guardar solo se muestra con el formulario abierto (Nuevo/Editar); sin él, Actual es null y fallaría *@
+            @if (Model.Formulario)
+            {
+                <input type="submit"
+                    value="Guardar"
+                    class="btn btn-secondary"
+                    asp-page-handler="BtGuardar"/>
+            }
+            <input id="flNombre" 
+                placeholder="Nombre"
+                asp-for="@Model.Filtro!.Nombre"/>
+        </div>
+
+        @if (ViewData.ContainsKey("Mensaje"))
+        {
+            @await Html.PartialAsync("../Emergentes/Mensajes.cshtml")
+        }
+        
+        @if (Model.Formulario || Model.Borrar)
+        {
+            <input type="hidden"
+                asp-for="@Model.Actual!.Id" />
+        }
+
+        @if (Model.Formulario)
+        {
+            <div>
+                <h3>Balones</h3>
+
+                <label>
+                    Codigo
+                </label>
+                <input id="nmCodigo"
+                    asp-for="@Model.Actual!.Codigo"/>
+                <br />
+
+                <label>
+                    Nombre
+                </label>
+                <input id="nmNombre"
+                    asp-for="@Model.Actual!.Nombre"/>
+                <br />
+
+                <label>
+                    Peso
+                </label>
+                <input id="nmPeso"
+                    asp-for="@Model.Actual!.Tamaño"/>
+                <br />
+
+                <label>
+                    Tipo
+                </label>
+                <select id="nmTipo"
+                    asp-for="@Model.Actual!.Id_Tipo"
+                    asp-items="@Model.ListaTipos">
+                    <option value="">-- Seleccione --</option>
+                </select>
+
+                <input type="hidden"
+                    asp-for="@Model.Actual!.Activa" />
+            </div>
+        }
+
+        @if (Model.Borrar)
+        {
+            <div class="popup">
+                <div class="pp_del_inner">
+                    <h3>
+                        Mensaje
+                    </h3>
+
+                    <h4>
+                        ¿Quiere borrar la carne con información
+                            @Model.Actual!.Codigo,
+                            @Model.Actual!.Nombre,
+                            @Model.Actual!.Tamaño?
+                    </h4>
+                    <input type="submit"
+                        value="Cancelar"
+                        class="btn btn-secondary"
+                        asp-page-handler="BtConsultar"/>
+                    <input type="submit"
+                        value="Borrar"
+                        class="btn btn-secondary"
+                        asp-page-handler="BtBorrar"/>
+                </div>
+            </div>
+        }
+
+        @if (!Model.Formulario)
+        {
+            <br />
+            <br />
+            <div class="containers_vn panel panel-default">
+                <table class="tb_data table table-striped table-bordered table-hover">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Tamaño</th>
+                        <th>Tipo</th>
+                        <th>Acción</th>
+                    </tr>
+                    @if (Model != null && Model.Lista != null)
+                    {
+                        foreach (var elemento in Model.Lista)
+                        {
+                            <tr>
+                                <td>@elemento.Codigo</td>
+                                <td>@elemento.Nombre</td>
+                                <td>@elemento.Tamaño</td>
+                                <td>@elemento.Id_Tipo</td>
+                                <td>
+                                    <input type="submit"
+                                        value="Editar"
+                                        class="btn btn-secondary"
+                                        asp-page-handler="BtEditar"
+                                        asp-route-data="@elemento.Id"/>
+                                    <input type="submit"
+                                        value="Borrar"
+                                        class="btn btn-secondary"
+                                        asp-page-handler="BtPregBorrar"
+                                        asp-route-data="@elemento.Id"/>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        }
+
+        </div>
+</form>
